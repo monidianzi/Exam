@@ -1,0 +1,47 @@
+.addQuestion {
+  width: 100%;
+  background-color: #fff;
+  height: calc(~'100vh - 82px');
+  padding: 20px;
+  overflow:auto;
+  overflow-x:hidden;
+  //题目描述
+  .question-describe {
+    margin-bottom: 20px;
+    .form-group {
+      width: 100%;
+      .form-control {
+        width: 100%;
+      }
+      .checkbox {
+        label {
+          height: 31px;
+          line-height: 31px;
+          input {
+            margin-right: 5px;
+          }
+        }
+
+      }
+    }
+  }
+  //题目内容
+  .question-content{
+    form {
+        textarea {
+          resize:none;
+        }
+        .glyphicon-remove {
+          color: #CC0000;
+        }
+        .question-main {
+          color: #337AB7;
+        }
+    }
+
+  }
+
+}
+.alarm {
+  border-color: #CC1603;
+}

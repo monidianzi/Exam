@@ -1,0 +1,120 @@
+<div class="addPaper">
+    <div class="paperDescribe">
+        <div class="row">
+            <form class="form-inline">
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control paperName" placeholder="试卷名称" v-model="paperName">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control paperClassify" v-model="paperClassify">
+                            <option disabled value="" selected>试卷分类</option>
+                            <option value="0">考试</option>
+                            <option value="1">练习</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control score" placeholder="总分" v-model="score">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input class="share" type="checkbox" v-model="share">是否共享
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control subject" placeholder="科目" v-model="subject">
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-9 rate">
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input class="repetition" type="checkbox" @change="rateShow">重复率
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" v-show="isRate">
+                        <select class="form-control year" v-model="year">
+                            <option disabled value="" selected>年份</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                        <p class="form-control-static">年以内</p>
+                    </div>
+                    <div class="form-group" v-show="isRate">
+                        <input class="form-control under" type="number" v-model="under">
+                        <p class="form-control-static">以下</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary addPaperQuestion" @click="addQuesDescribe">添加试题描述</button>
+    <div class="paperQuestion">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="5%">排序</th>
+                    <th>试题描述</th>
+                    <th width="10%">最后使用时间</th>
+                    <th width="5%">分数</th>
+                    <th width="5%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(ques,index) in question">
+                    <td colspan="5">
+                        <table width="100%" class="quesList">
+                            <tr>
+                                <td width="5%" class="tdPadding">{{order[index]}}</td>
+                                <td><input  v-model="ques.titleDescribe" class="quesDescribe">
+                                    <button @click="openSelectQues(index)" data-toggle="modal" data-backdrop="static">选择试题</button>
+                                </td>
+                                <td width="10%"></td>
+                                <td width="5%"><input type="number" v-model="ques.score" class="quesScore"></td>
+                                <td width="5%" class="tdPadding"></td>
+                            </tr>
+                            <tr v-for="(q,index) in ques.questionGroup">
+                                <td class="tdPadding">{{+index+1}}</td>
+                                <td class="tdPadding">{{q.stem}}</td>
+                                <td class="tdPadding">{{q.lastUpdate}}</td>
+                                <td><input  type="number" v-model="q.score" class="quesScore"></td>
+                                <td class="tdPadding"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary" @click="savePaper">保存</button>
+    <button type="button" class="btn btn-default">保存并退出</button>
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document"  style="width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" @click="modalClose"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">选择试题</h4>
+                </div>
+                <div class="modal-body">
+                    <chooseQuestion :isQuesOperation="isQuesOperation" @selectQuestion="selectQuestion" ref="quesClean">
+                    </chooseQuestion>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="questionManage">
+    <div class="search">
+        <div class="row">
+            <form class="form-inline">
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control knowledge" placeholder="请选择知识点!" id="knowledge" v-model="search.knowledge">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control difficulty" id="difficulty" v-model="search.difficulty">
+                            <option disabled value="" selected>难度系数</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control type" id="type" v-model="search.type">
+                            <option disabled value="" selected>题目类型</option>
+                            <option value="0">单选题</option>
+                            <option value="1">多选题</option>
+                            <option value="2">简答题</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control stem" placeholder="试题内容" id="stem" v-model="search.stem">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control founder" placeholder="出题人" id="founder" v-model="search.founder">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control form_datetime creationTime" placeholder="创建时间" id="creationTime" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary" @click="goSearch">搜索</button>
+                        <button type="button" class="btn btn-default" @click="empty">清空</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="questionList">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" @change="selectAll"></th>
+                    <th>编号</th>
+                    <th>题型</th>
+                    <th>试题内容</th>
+                    <th>创建人</th>
+                    <th>知识点</th>
+                    <th>状态</th>
+                    <th>难度系数</th>
+                    <th>最后更新时间</th>
+                    <th v-show="isQuesOperation">操作</th>
+                </tr>
+            </thead>
+            <tbody v-for="(question,index) in questionList">
+                <tr>
+                    <td width="30px"><input type="checkbox" class="deleteChoose" v-model="choose" v-bind:value = "question.questionID" @change="chooseQuestionTopaper(index,$event)"></td>
+                    <td>{{question.questionID}}</td>
+                    <td>{{question.type | typeToString}}</td>
+                    <td>{{question.stem}}</td>
+                    <td>{{question.founder}}</td>
+                    <td>{{question.knowledge}}</td>
+                    <td>{{question.auditStatus | auditStatusToString}}</td>
+                    <td>{{question.difficulty}}</td>
+                    <td>{{question.lastUpdate}}</td>
+                    <td v-show="isQuesOperation"><a href="javascript:;" @click="QuestionModify(index)">编辑</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="bottom">
+        <div class="delete pull-left" v-show="isQuesOperation">
+            <button type="button" class="btn btn-default" @click="questionDel">删除</button>
+        </div>
+        <!--添加试卷激活本组件，显示添加按钮，向父组件传递勾选试题集合-->
+        <div class="delete pull-left" v-show="!isQuesOperation">
+            <button type="button" class="btn btn-default" @click="addQuesToPeper">添加</button>
+        </div>
+        <div class="paging pull-right">
+            <ul id="questionPage"></ul>
+        </div>
+    </div>
+
+</div>

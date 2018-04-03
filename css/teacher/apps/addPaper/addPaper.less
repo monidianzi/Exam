@@ -1,0 +1,79 @@
+.addPaper {
+  background-color: #fff;
+  height: calc(~'100vh - 82px');
+  padding: 20px;
+  overflow: auto;
+  overflow-x: hidden;
+  .paperDescribe {
+    .form-inline {
+      .form-group {
+        width:100%;
+        margin-bottom: 20px;
+        .paperName, .paperClassify, .score, .subject {
+          width: 100%;
+        }
+        .checkbox {
+          label {
+            height: 34px;
+            line-height: 34px;
+            input {
+              margin-right: 5px;
+              margin-top: 0;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+      .rate {
+        .form-group {
+          width:auto;
+          .form-control {
+            width: auto;
+          }
+          .under {
+            width: 60px;
+          }
+        }
+      }
+    }
+  }
+  .addPaperQuestion {
+    margin-bottom: 20px;
+  }
+  .paperQuestion {
+    table {
+      tbody {
+        tr {
+          td[colspan='5'] {
+            border: 0;
+            padding: 0;
+            .quesList {
+              tr {
+                td {
+                  border: 1px solid #ddd;
+                  height: 38px;
+                  input {
+                    border: 0;
+                    //border-right: 1px solid #ddd ;
+                    padding-left: 8px;
+                    height: 37px;
+                  }
+                  .quesDescribe {
+                    width: 70%;
+                  }
+                  .quesScore {
+                    width: 74px;
+                  }
+                }
+                .tdPadding {
+                  padding-left: 8px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}

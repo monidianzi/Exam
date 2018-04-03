@@ -1,0 +1,82 @@
+<div class="addQuestion">
+    <div class="question-describe">
+        <div class="row">
+            <form class="form-inline">
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control knowledge" placeholder="请选择知识点!" id="knowledge" v-model="question.knowledge">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control difficulty" id="difficulty" v-model="question.difficulty">
+                            <option disabled value="">难度系数</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control type" v-on:change="changeType" id="type" v-model="question.type">
+                            <option disabled value="">题目类型</option>
+                            <option value="0">单选题</option>
+                            <option value="1">多选题</option>
+                            <option value="2">简答题</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label for="share">
+                                <input class="share" type="checkbox" id="share" v-model="question.share">是否共享
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="question-content">
+        <form>
+            <div class="form-group">
+                <span class="glyphicon glyphicon-align-right question-main" aria-hidden="true"></span>
+                <label for="exampleInputEmail1" class="question-main">试题描述</label>
+                <textarea class="form-control stem" rows="2" id="stem" v-model="question.stem"></textarea>
+            </div>
+            <!--选择题-->
+            <div v-show="isChoiceActive">
+                <span class="glyphicon glyphicon-check question-main" aria-hidden="true"></span>
+                <label class="question-main">试题选项</label>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" @click="addChoice">添加+</button>
+                </div>
+                <div class="form-group" v-for="(options,index) in question.option">
+                    <label for="inputEmail3">{{String.fromCharCode(65+index)}}.</label>
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" @click="deleteChoice(index)"></span>
+                    <input type="checkbox" class="standardAnswer" v-bind:value = "+index+1" v-model="question.standardAnswer">
+                    <input class="form-control option" v-model="question.option[index]">
+                </div>
+            </div>
+            <!--简答题-->
+            <div v-show="isQuestionsActive">
+                <div class="form-group">
+                    <span class="glyphicon glyphicon-check question-main" aria-hidden="true"></span>
+                    <label for="exampleInputEmail1" class="question-main">试题答案</label>
+                    <textarea class="form-control standardAnswer" rows="4" id="standardAnswer" v-model="question.standardAnswer"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <span class="glyphicon glyphicon-hand-down question-main" aria-hidden="true"></span>
+                <label for="exampleInputEmail1" class="question-main">答案解析</label>
+                <textarea class="form-control parsing" rows="3" id="parsing" v-model="question.parsing"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" @click="save">保存</button>
+            <button type="button" class="btn btn-default">取消</button>
+        </form>
+    </div>
+</div>

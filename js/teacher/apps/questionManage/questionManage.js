@@ -303,18 +303,27 @@ define([
                 this.$emit('selectQuestion',self.selectQuestion);
             },
             /**
-             * 添加试卷激活本组件、将勾选试题对象添加至selectQuestion数组
+             * 添加试卷激活本组件、将勾选试题对象添加至selectQuestion数组、取消勾选从selectQuestion中删除该元素
              * @method
-             * @param
+             * @param {String} index 所选试题索引
+             * @param {Object} event 所选试题事件
              * @return
              */
             chooseQuestionTopaper: function (index,event) {
-                //如果取消勾选试题、如何删除数组中对应元素
-                if(!self.isQuesOperation && event.target.checked){
-                    self.selectQuestion.push(JSON.parse(JSON.stringify(self.questionList[index])));
-
-
-                    //通过indexof获取取消勾选试题在selectQuestion中的下标，并删除
+                if(!self.isQuesOperation){
+                    if(event.target.checked){
+                        self.selectQuestion.push(JSON.parse(JSON.stringify(self.questionList[index])));
+                    } else {
+                        //无法通过indexOf获取当前对象下标、因对象与对象无法相等比较
+                        //即只能遍历selectQuestion比较与当前勾选试题对象questionID相同、删除selectQuestion中该元素
+                        self.selectQuestion.forEach(function (element,num) {
+                            var questionID = JSON.parse(JSON.stringify(self.questionList[index])).questionID;
+                            if(questionID == element.questionID) {
+                                self.selectQuestion.splice(num,1);
+                            }
+                        })
+                    }
+                    console.log(self.selectQuestion);
                 }
             },
             /**
@@ -327,7 +336,6 @@ define([
                 self.choose = [];
                 self.selectQuestion = [];
             }
-
         },
         filters: {
             /**

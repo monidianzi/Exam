@@ -14,14 +14,16 @@ define([
     'vue',
     'addQuestion',
     'questionManage',
-    'addPaper'
+    'addPaper',
+    'paperManage'
 ], function(
     _view,
     treeview,
     vue,
     addQuestion,
     questionManage,
-    addPaper
+    addPaper,
+    paperManage
 ) {
     var self;
     var app = new vue({
@@ -31,11 +33,13 @@ define([
          * 属性说明
          * @property
          * {String} activeApp 当前激活组件
-         * {String} questionID 试题ID（试题管理组件-试题编辑事件获取ID）
+         * {Object} questionInfo 试题信息
+         * {Object} paperInfo 试卷信息
          */
         data:{
             activeApp:'main',
-            questionInfo: {}
+            questionInfo: {},
+            paperInfo: {}
         },
         methods:{
             /**
@@ -107,7 +111,7 @@ define([
                             {
                                 text:'试卷管理',
                                 icon: "glyphicon glyphicon-th-list",
-                                component:'papermanage',
+                                component:'paperManage',
                                 deep:2,
                                 href:''
                             }
@@ -176,7 +180,7 @@ define([
                 });
             },
             /**
-             * 监听试题管理组件下试题编辑事件、获取需编辑的试题ID、切换激活组件
+             * 监听试题管理组件下试题编辑事件、获取需编辑的试题信息、切换添加试题组件
              * @method
              * @param {Object} question 试题信息
              * @return
@@ -184,13 +188,24 @@ define([
             QuestionModify: function (question) {
                 this.questionInfo = question;
                 this.activeApp = addQuestion;
+            },
+            /**
+             * 监听试卷管理组件下试卷编辑事件、获取需编辑的试卷信息、切换添加试卷组件
+             * @method
+             * @param {Object} paper 试卷信息
+             * @return
+             */
+            papermodify: function (paper) {
+                this.paperInfo = paper;
+                this.activeApp = addPaper;
             }
 
         },
         components:{
             addQuestion: addQuestion,
-            questionManage:questionManage,
-            addPaper: addPaper
+            questionManage: questionManage,
+            addPaper: addPaper,
+            paperManage: paperManage
         },
         mounted:function () {
             //self指向当前vue对象

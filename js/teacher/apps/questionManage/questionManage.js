@@ -251,7 +251,6 @@ define([
              * @return
              */
             selectAll: function (event) {
-                console.log(typeof(event) )
                 if(event.target.checked) {
                     self.questionList.forEach(function (t) { self.choose.push(t.questionID) });
                 }else {
@@ -323,7 +322,6 @@ define([
                             }
                         })
                     }
-                    console.log(self.selectQuestion);
                 }
             },
             /**

@@ -19,6 +19,10 @@ require.config({
         'addPaperView': 'html/teacher/apps/addPaper/addPaper.html',
         'addPaperStyle': 'css/teacher/apps/addPaper/addPaper',
 
+        'paperManage': 'js/teacher/apps/paperManage/paperManage',
+        'paperManageView': 'html/teacher/apps/paperManage/paperManage.html',
+        'paperManageStyle': 'css/teacher/apps/paperManage/paperManage',
+
 
         'datetimepickerCss': 'public/bootstrap-datetimepicker/bootstrap-datetimepicker.min',
         'treeviewCss': 'public/bootstrap-treeview/bootstrap-treeview.min',

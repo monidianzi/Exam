@@ -54,6 +54,17 @@ define([
                 isRate: false,
             }
         },
+        /**
+         * 父组件获取属性说明
+         * @property
+         * {Object} paperInfo 试卷信息
+         */
+        props: {
+            paperInfo: {
+                type: Object,
+                default: {}
+            }
+        },
         methods:{
             /**
              * 重复率显示与隐藏
@@ -133,13 +144,30 @@ define([
             modalClose: function () {
                 self.$refs.quesClean.cleanQues();
                 $('.bs-example-modal-lg').modal('hide');
+            },
+            /**
+             * 试卷编辑、填充当前页面
+             * @method
+             * @param {Object} paper 试题内容
+             * @return
+             */
+            fill: function (paper) {
+                self.paperName = paper.paperName;
+                self.paperClassify = paper.paperClassify;
+                self.score = paper.score;
+                self.share = paper.share  == 1 ? true:false;
+                self.subject = paper.subject;
+                self.question = paper.question;
             }
         },
         components: {
             chooseQuestion: questionManage
         },
         mounted: function () {
-
+            //试题编辑激活本组件
+            if( JSON.stringify(this.paperInfo) != '{}') {
+                self.fill(self.paperInfo);
+            }
         },
         created: function () {
 

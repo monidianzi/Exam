@@ -39,9 +39,13 @@
             <div class="container-fluid mainframe">
                 <!--@QuestionModify---试题管理组件、试题编辑事件-->
                 <!--:questionInfo---试题编辑复用添加试题组件、父组件向下传递试题信息-->
+                <!--@paperModify---试卷管理组件、试卷编辑事件-->
+                <!--:paperInfo---试卷编辑复用添加试卷组件、父组件向下传递试题信息-->
                 <component v-bind:is="activeApp"
                            @QuestionModify="QuestionModify"
-                           :questionInfo="questionInfo">
+                           :questionInfo="questionInfo"
+                           @paperModify="papermodify"
+                           :paperInfo="paperInfo">
 
                 </component>
 

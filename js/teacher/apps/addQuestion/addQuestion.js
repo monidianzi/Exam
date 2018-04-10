@@ -51,7 +51,7 @@ define([
         /**
          * 父组件获取属性说明
          * @property
-         * {String} questionID 试题ID
+         * {Object} questionInfo 试题信息
          */
         props: {
             questionInfo: {

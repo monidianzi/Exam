@@ -10,7 +10,7 @@
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control difficulty" id="difficulty" v-model="search.difficulty">
-                            <option disabled value="" selected>难度系数</option>
+                            <option value="" selected>难度系数</option>
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -22,10 +22,16 @@
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control type" id="type" v-model="search.type">
-                            <option disabled value="" selected>题目类型</option>
+                            <option value="" selected>题目类型</option>
                             <option value="0">单选题</option>
                             <option value="1">多选题</option>
-                            <option value="2">简答题</option>
+                            <option value="2">判断题</option>
+                            <option value="3">填空题</option>
+                            <option value="4">简答题</option>
+                            <option value="5">名词解释</option>
+                            <option value="6">计算题</option>
+                            <option value="7">论述题</option>
+                            <option value="8">设计题</option>
                         </select>
                     </div>
                 </div>
@@ -57,7 +63,7 @@
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th><input type="checkbox" @change="selectAll"></th>
+                    <th><input type="checkbox" @change="selectAll" v-show="isQuesOperation"></th>
                     <th>编号</th>
                     <th>题型</th>
                     <th>试题内容</th>
@@ -74,12 +80,12 @@
                     <td width="30px"><input type="checkbox" class="deleteChoose" v-model="choose" v-bind:value = "question.questionID" @change="chooseQuestionTopaper(index,$event)"></td>
                     <td>{{question.questionID}}</td>
                     <td>{{question.type | typeToString}}</td>
-                    <td>{{question.stem}}</td>
+                    <td><a href="javascript:;" @click="quesPreModal(index)">{{question.stem | cutString}}</a></td>
                     <td>{{question.founder}}</td>
                     <td>{{question.knowledge}}</td>
                     <td>{{question.auditStatus | auditStatusToString}}</td>
                     <td>{{question.difficulty}}</td>
-                    <td>{{question.lastUpdate}}</td>
+                    <td>{{question.lastUpdate | unixToTime}}</td>
                     <td v-show="isQuesOperation"><a href="javascript:;" @click="QuestionModify(index)">编辑</a></td>
                 </tr>
             </tbody>
@@ -97,5 +103,18 @@
             <ul id="questionPage"></ul>
         </div>
     </div>
-
+    <div class="modal fade" id="quesPre" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" @click="quesPreModalclose"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">试题预览</h4>
+                </div>
+                <div class="modal-body">
+                    <questionPreview :questiondetail="questiondetail">
+                    </questionPreview>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

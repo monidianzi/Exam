@@ -1,0 +1,17 @@
+<div class="questionPreview">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{stem}}</div>
+        <div class="panel-body">
+            <div class="choice" v-for="(choice,index) in option" v-show=" type == '0' || type == '1'">
+                <label>{{String.fromCharCode(65+index)}}.</label>
+                <label>
+                    <input type="checkbox" value="">{{choice}}
+                </label>
+            </div>
+            <div class="shortAnswerQuestion" v-show=" type == '4'">
+                <textarea class="form-control" rows="3" style="resize: none"></textarea>
+            </div>
+        </div>
+        <div class="panel-footer">正确答案:{{standardAnswer | numToChar}}<br>答案解析:{{parsing}}</div>
+    </div>
+</div>

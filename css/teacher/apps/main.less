@@ -1,34 +1,52 @@
- .navbar {
-   margin: 0;
-   background-color:#313F4C;
-   border: 0;
-   border-radius:0;
- }
- .navbar-default {
-   .navbar-nav {
-     li {
-       .name,.user {
-         color: #fff;
-       }
-       .name:hover,.user:hover {
-         color: #ddd;
-       }
-       .name:focus {
-         color: #ddd;
-       }
-       .user:focus {
-         color: #000;
-       }
-     }
-   }
- }
+body{
+  height: 100%;
+  overflow:-Scroll;
+  overflow-y:hidden;
+  background-size:100%;
+}
+nav.navbar-default{
+  background-color:#34495e;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 10px;
+}
+.navbar .container-fluid .navbar-header{
+  height: 80px;
+}
+nav.navbar-default .navbar-brand{
+  height: 100%;
+  padding:0px;
+  padding-left: 15px;
+  color: white;
+  font-size: 30px;
+  line-height: 100px;
+}
+nav.navbar-default .navbar-brand:hover{
+  color: white;
+}
+.navbar .container-fluid .collapse .navbar-right li p{
+  margin-top: 20px;
+  color: white;
+}
+nav.navbar-default .navbar-nav li a{
+  color: white;
+  padding-left: 0;
+}
+nav.navbar-default .navbar-nav li a:hover {
+  color: white;
+}
+nav.navbar-default .navbar-nav li a:focus {
+  color: white;
+}
 .tree{
   padding: 0;
-  height: calc(~'100vh - 52px');
+  height: calc(~'100vh - 110px');
   background-color: #516272;
+  overflow: auto;
+  overflow-x: hidden;
 }
-.col-md-10{
-  height: calc(~'100vh - 52px');
+.main{
+  height: calc(~'100vh - 110px');
   background-color: #F5F6FB;
   .mainframe {
     margin-top: 15px;

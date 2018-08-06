@@ -10,22 +10,28 @@
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control difficulty" id="difficulty" v-model="question.difficulty">
-                            <option disabled value="">难度系数</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <option value="">难度系数</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control type" v-on:change="changeType" id="type" v-model="question.type">
-                            <option disabled value="">题目类型</option>
+                            <option value="">题目类型</option>
                             <option value="0">单选题</option>
                             <option value="1">多选题</option>
-                            <option value="2">简答题</option>
+                            <option value="2">判断题</option>
+                            <option value="3">填空题</option>
+                            <option value="4">简答题</option>
+                            <option value="5">名词解释</option>
+                            <option value="6">计算题</option>
+                            <option value="7">论述题</option>
+                            <option value="8">设计题</option>
                         </select>
                     </div>
                 </div>
@@ -42,16 +48,25 @@
         </div>
     </div>
     <div class="question-content">
-        <form>
+        <form enctype="multipart/form-data">
             <div class="form-group">
                 <span class="glyphicon glyphicon-align-right question-main" aria-hidden="true"></span>
                 <label for="exampleInputEmail1" class="question-main">试题描述</label>
                 <textarea class="form-control stem" rows="2" id="stem" v-model="question.stem"></textarea>
             </div>
+            <div class="form-group">
+                <span class="glyphicon glyphicon glyphicon-film question-main" aria-hidden="true"></span>
+                <label for="exampleInputEmail1" class="question-main">试题图片</label>
+                <input type="file" accept="image/*" name="pic">
+                <!--<div v-show="questionInfo.pic">-->
+                    <!--<img :src="questionInfo.pic" alt="">-->
+                <!--</div>-->
+                <a :href="'../../'+questionInfo.pic" v-show="questionInfo.pic" target="_blank">{{questionInfo.pic | getFileName}}</a>
+            </div>
             <!--选择题-->
             <div v-show="isChoiceActive">
                 <span class="glyphicon glyphicon-check question-main" aria-hidden="true"></span>
-                <label class="question-main">试题选项</label>
+                <label class="question-main">试题选项&nbsp;&nbsp;(红色×用于删除多于选项、复选框用于勾选正确答案)</label>
                 <div class="form-group">
                     <button type="button" class="btn btn-default" @click="addChoice">添加+</button>
                 </div>
@@ -76,7 +91,7 @@
                 <textarea class="form-control parsing" rows="3" id="parsing" v-model="question.parsing"></textarea>
             </div>
             <button type="button" class="btn btn-primary" @click="save">保存</button>
-            <button type="button" class="btn btn-default">取消</button>
+            <button type="button" class="btn btn-default" @click="cancle">取消</button>
         </form>
     </div>
 </div>

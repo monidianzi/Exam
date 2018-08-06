@@ -1,0 +1,25 @@
+<div class="paperPreview">
+    <h2>{{paperName}}</h2>
+    <span>总分:  {{score}}</span>&nbsp;&nbsp;
+    <span>科目:  {{subject}}</span>&nbsp;&nbsp;
+    <span>创建人:  {{founder}}</span>&nbsp;&nbsp;
+    <div class="questionList" v-for="(quesArray,quesArrayIndex) in question">
+        <h4>{{quesArrayIndex | numToUppCase}}、 {{quesArray.titleDescribe}}({{quesArray.score}})</h4>
+        <div class="ques" v-for="(ques,quesIndex) in quesArray.questionGroup">
+            <h5>{{quesIndex+1}}. {{ques.stem}}</h5>
+            <div class="choice" v-for="(choice,index) in ques.option.split('%%%')" v-show="ques.type == '0' || ques.type == '1'">
+                <label>{{String.fromCharCode(65+index)}}.</label>
+                <label>
+                    <input type="checkbox" value="">{{choice.substr(+choice.indexOf('.')+1)}}
+                </label>
+            </div>
+            <div class="shortAnswerQuestion" v-show="ques.type == '4'">
+                <textarea class="form-control" rows="3" style="resize: none"></textarea>
+            </div>
+            <div class="prasing">
+                分值:{{ques.score}}<br>正确答案:{{ques.standardAnswer | numToChar(ques.type)}}<br>答案解析:{{ques.parsing}}
+            </div>
+        </div>
+
+    </div>
+</div>

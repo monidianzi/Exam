@@ -5,7 +5,7 @@
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control paperClassify" v-model="search.paperClassify">
-                            <option disabled value="" selected>试卷分类</option>
+                            <option value="" selected>试卷分类</option>
                             <option value="0">考试</option>
                             <option value="1">练习</option>
                         </select>
@@ -24,7 +24,7 @@
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control subject" v-model="search.subject">
-                            <option disabled value="" selected>学科分类</option>
+                            <option value="" selected>学科分类</option>
                             <option value="0">计算机</option>
                             <option value="1">通信工程</option>
                         </select>
@@ -33,7 +33,7 @@
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control auditStatus" v-model="search.auditStatus">
-                            <option disabled value="" selected>试卷状态</option>
+                            <option value="" selected>试卷状态</option>
                             <option value="0">已通过</option>
                             <option value="1">正在审核</option>
                             <option value="2">审核未通过</option>
@@ -63,7 +63,7 @@
         <table class="table table-hover table-bordered">
             <thead>
             <tr>
-                <th><input type="checkbox" @change="selectAll"></th>
+                <th><input type="checkbox" @change="selectAll" v-show="isPaperOperation"></th>
                 <th>编号</th>
                 <th>试卷名称</th>
                 <th>试题总分</th>
@@ -71,30 +71,48 @@
                 <th>试卷状态</th>
                 <th>创建人</th>
                 <th>最后更新时间</th>
-                <th>操作</th>
+                <th v-show="isPaperOperation">操作</th>
             </tr>
             </thead>
             <tbody v-for="(paper,index) in paperList">
             <tr>
-                <td width="30px"><input type="checkbox" v-model="choose" v-bind:value = "paper.paperID"></td>
+                <td width="30px"><input type="checkbox" v-model="choose" v-bind:value = "paper.paperID" @change="choosePaperToExam(index,$event)"></td>
                 <td>{{paper.paperID}}</td>
-                <td>{{paper.paperName}}</td>
+                <td><a href="javascript:;" @click="paperPreModal(index)">{{paper.paperName}}</a></td>
                 <td>{{paper.score}}</td>
                 <td>{{paper.questionNumber}}</td>
-                <td>{{paper.auditStatus}}</td>
+                <td>{{paper.paperStatus | paperStatusToString}}</td>
                 <td>{{paper.founder}}</td>
-                <td>{{paper.lastUpdate}}</td>
-                <td><a href="javascript:;" @click="paperModify(index)" >编辑</a></td>
+                <td>{{paper.lastUpdate | unixToTime}}</td>
+                <td  v-show="isPaperOperation"><a href="javascript:;" @click="paperModify(index)" >编辑</a></td>
             </tr>
             </tbody>
         </table>
     </div>
     <div class="bottom">
-        <div class="delete pull-left">
+        <div class="delete pull-left" v-show="isPaperOperation">
             <button type="button" class="btn btn-default" @click="questionDel">删除</button>
+        </div>
+        <!--添加考试激活本组件，显示添加按钮，向父组件传递勾选试卷集合-->
+        <div class="delete pull-left" v-show="!isPaperOperation">
+            <button type="button" class="btn btn-primary" @click="addToExam">添加</button>
         </div>
         <div class="paging pull-right">
             <ul id="questionPage"></ul>
+        </div>
+    </div>
+    <div class="modal fade" id="paperPre" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" @click="paperPreModalclose"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">试卷预览</h4>
+                </div>
+                <div class="modal-body">
+                    <paperPreview :paperdetail="paperdetail">
+                    </paperPreview>
+                </div>
+            </div>
         </div>
     </div>
 </div>

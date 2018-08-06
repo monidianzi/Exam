@@ -1,0 +1,49 @@
+.addExam {
+  //background-color: #fff;
+  height: calc(~'100vh - 142px');
+  //padding: 20px;
+  overflow: auto;
+  overflow-x: hidden;
+  h2 {
+    margin-top: 0;
+  }
+  .form-inline {
+    .form-group {
+      width: 100%;
+      margin-bottom: 20px;
+      .examName,.examClassify,.examAttention{
+        width: 80%;
+      }
+      .answerType,.scoreType,.duration,.startTime,.clockStyle{
+        width: 60%;
+      }
+      .correctBegin,.correctEnd {
+        width: 50%;
+      }
+      .late {
+        width: 100px;
+      }
+      textarea {
+        resize:none;
+      }
+    }
+  }
+  .examDescribe {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px 20px 0 20px;
+  }
+  .examRule {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px 20px 0 20px;
+  }
+  .paperAndGroup {
+    background-color: #fff;
+    margin-bottom: 20px;
+    padding: 20px 20px 20px 20px;
+    .btn {
+      margin: 10px 0;
+    }
+  }
+}

@@ -2,28 +2,16 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#"></a>
+            <!--<a class="navbar-brand" href="#">-->
+                <!--<img alt="Brand" src="../../images/brand.png">-->
+            <!--</a>-->
+            <a class="navbar-brand">在线考试系统平台</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="#" class="name">在线考试平台</a></li>
-            </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">&nbsp;&nbsp;您好!郭玉纯<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" class="modify_info">个人资料</a></li>
-                        <li><a href="#" >修改密码</a></li>
-                        <li><a href="#">切换用户</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">退出</a></li>
-                    </ul>
+                <li>
+                    <p>欢迎您：</p>
+                    <a href="javascript:;" @click="back">退出</a>
                 </li>
             </ul>
         </div>
@@ -35,18 +23,23 @@
         <div class="col-md-2 tree">
             <div id="treeview" class=""></div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-10 main">
             <div class="container-fluid mainframe">
                 <!--@QuestionModify---试题管理组件、试题编辑事件-->
                 <!--:questionInfo---试题编辑复用添加试题组件、父组件向下传递试题信息-->
                 <!--@paperModify---试卷管理组件、试卷编辑事件-->
                 <!--:paperInfo---试卷编辑复用添加试卷组件、父组件向下传递试题信息-->
+                <!--@examModify---考试管理组件、考试编辑事件-->
+                <!--:examInfo---考试编辑复用添加考试组件、父组件向下传递试题信息-->
+                <!--@showHomePage---所有子组件显示主页事件-->
                 <component v-bind:is="activeApp"
                            @QuestionModify="QuestionModify"
                            :questionInfo="questionInfo"
                            @paperModify="papermodify"
-                           :paperInfo="paperInfo">
-
+                           :paperInfo="paperInfo"
+                           @examModify="examModify"
+                           :examInfo="examInfo"
+                           @showHomePage="showHomePage">
                 </component>
 
             </div>

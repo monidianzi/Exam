@@ -1,0 +1,73 @@
+<div class="groupManage">
+    <div class="myGroup">
+        <div class="row">
+            <div class="col-xs-6 col-md-6 myGroupTable">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="2">我的组</th>
+                        </tr>
+                        <tr>
+                            <th>组名称</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(group,index) in myGroup">
+                            <td>{{group.groupName}}</td>
+                            <td><a href="javascript:;" @click="modify(index,group.groupID)">编辑</a>&nbsp;<a href="javascript:;" @click="deleteGroup(index)">删除</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2 col-md-2">
+                <button type="button" class="btn btn-primary createBtn" @click="creatNew">创建新组</button>
+            </div>
+        </div>
+    </div>
+    <div class="cerateGroup" v-show="isCreat">
+        <div class="row">
+            <div class="col-xs-3 col-md-3">
+                <input class="form-control" placeholder="组名称" v-model="groupName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4 col-md-4 schoolInstitueTree">
+                <div id="institueTree">
+
+                </div>
+                <button type="button" class="btn btn-primary" @click="addUserToGroup">添加</button>
+            </div>
+            <div class="col-xs-8 col-md-8 cerateGroupStudent">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th colspan="6">组内成员</th>
+                    </tr>
+                    <tr>
+                        <th>学院</th>
+                        <th>专业</th>
+                        <th>班级</th>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(student,index) in groupStudentList">
+                        <td>{{student.institute}}</td>
+                        <td>{{student.major}}</td>
+                        <td>{{student.aclass}}</td>
+                        <td>{{student.number}}</td>
+                        <td>{{(student.text? student.text : student.studentName)}}</td>
+                        <td><a href="javascript:;" @click="delStu(index)">删除</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary pull-right" @click="save">提交</button>
+    </div>
+</div>

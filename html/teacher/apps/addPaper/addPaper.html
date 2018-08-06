@@ -10,7 +10,7 @@
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
                         <select class="form-control paperClassify" v-model="paperClassify">
-                            <option disabled value="" selected>试卷分类</option>
+                            <option value="" selected>试卷分类</option>
                             <option value="0">考试</option>
                             <option value="1">练习</option>
                         </select>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-3 col-sm-3">
                     <div class="form-group">
-                        <input class="form-control score" placeholder="总分" v-model="score">
+                        <input class="form-control score" placeholder="总分" v-model="score" readonly>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-3">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group" v-show="isRate">
                         <select class="form-control year" v-model="year">
-                            <option disabled value="" selected>年份</option>
+                            <option value="" selected>年份</option>
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -80,19 +80,19 @@
                         <table width="100%" class="quesList">
                             <tr>
                                 <td width="5%" class="tdPadding">{{order[index]}}</td>
-                                <td><input  v-model="ques.titleDescribe" class="quesDescribe">
+                                <td><input  v-model="ques.titleDescribe" class="quesDescribe" placeholder="请输入题目名称！">
                                     <button @click="openSelectQues(index)" data-toggle="modal" data-backdrop="static">选择试题</button>
                                 </td>
                                 <td width="10%"></td>
-                                <td width="5%"><input type="number" v-model="ques.score" class="quesScore"></td>
-                                <td width="5%" class="tdPadding"></td>
+                                <td width="5%">&nbsp;&nbsp;{{ques.score}}</td>
+                                <td width="5%" class="tdPadding"><a href="javascript:;" @click="del(index)">删除</a></td>
                             </tr>
-                            <tr v-for="(q,index) in ques.questionGroup">
-                                <td class="tdPadding">{{+index+1}}</td>
+                            <tr v-for="(q,Qindex) in ques.questionGroup">
+                                <td class="tdPadding">{{+Qindex+1}}</td>
                                 <td class="tdPadding">{{q.stem}}</td>
-                                <td class="tdPadding">{{q.lastUpdate}}</td>
-                                <td><input  type="number" v-model="q.score" class="quesScore"></td>
-                                <td class="tdPadding"></td>
+                                <td class="tdPadding">{{q.lastUpdate | unixToTime}}</td>
+                                <td><input  type="number" min="1" v-model="q.score" class="quesScore" @keypress="negativeBan"></td>
+                                <td class="tdPadding"><a href="javascript:;" @click="Qdel(index,Qindex)">删除</a></td>
                             </tr>
                         </table>
                     </td>
@@ -100,10 +100,11 @@
             </tbody>
         </table>
     </div>
+    <button type="button" class="btn btn-primary" @click="preview">预览</button>
     <button type="button" class="btn btn-primary" @click="savePaper">保存</button>
     <button type="button" class="btn btn-default">保存并退出</button>
 
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg" role="document"  style="width: 80%;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -113,6 +114,21 @@
                 <div class="modal-body">
                     <chooseQuestion :isQuesOperation="isQuesOperation" @selectQuestion="selectQuestion" ref="quesClean">
                     </chooseQuestion>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="paperPre" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" @click="paperPreModalclose"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">试卷预览</h4>
+                </div>
+                <div class="modal-body">
+                    <paperPreview :paperdetail="paperdetail">
+                    </paperPreview>
                 </div>
             </div>
         </div>

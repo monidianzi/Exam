@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="/Exam/public/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script type="text/javascript" src="/Exam/public/jquery/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="/Exam/public/vue/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="/Exam/css/teacher/apps/studentPaper/studentPaper.css">
+</head>
+<body>
+<div class="container paperDetail">
+    <div class="row paperInfo">
+        <div class="col-md-12 paperName">
+            <h1>{{paperInfo.paperName}}</h1>
+        </div>
+        <div class="col-md-6 paperLeft">
+            <p class="col-md-6 realName">姓名： {{paperInfo.realName}}</p>
+            <p class="col-md-6 school">考生学校：{{paperInfo.paperName}}</p>
+            <p class="col-md-6 examScore">满分：{{paperInfo.examScore}}</p>
+            <p class="col-md-6 auditor">审核人：{{paperInfo.teacherName}}</p>
+        </div>
+        <div class="col-md-6 paperRight">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>题型</th>
+                    <th>得分</th>
+                    <th>评卷人</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(ques,index) in paperContent">
+                        <td>{{ques.titleDescribe}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row questionInfo" v-for="(quesArray,index) in paperContent">
+        <h4>{{index | numToUppCase}}、 {{quesArray.titleDescribe}} ({{quesArray.score}}分)</h4>
+        <div class="ques" v-for="(ques,quesIndex) in quesArray.questionGroup">
+            <div class="panel panel-default" v-show="ques.type == '0'">
+                <div class="panel-heading">{{quesIndex+1}}. {{ques.stem}} <p class="pull-right">({{ques.score}}分)</p></div>
+                <div class="panel-body">
+                    <div class="choice" v-for="(choice,optionIndex) in ques.option.split('%%%')">
+                        <label>{{String.fromCharCode(65+optionIndex)}}. {{choice.substr(+choice.indexOf('.')+1)}}</label>
+                        <!--<label>-->
+                            <!--<input type="checkbox" value="">{{choice.substr(+choice.indexOf('.')+1)}}-->
+                        <!--</label>-->
+                    </div>
+                    <div class="shortAnswerQuestion" v-show="ques.type == '4'">
+                        <textarea class="form-control" rows="3" style="resize: none" readonly>{{ques.studentAnswer}}</textarea>
+                    </div>
+                </div>
+                <div class="panel-footer">正确答案:{{ques.standardAnswer | numToChar(ques.type)}}<br>答案解析:{{ques.parsing}}</div>
+            </div>
+            <div class="panel panel-default" v-show="ques.type == '1'">
+                <div class="panel-heading">{{quesIndex+1}}. {{ques.stem}}</div>
+                <div class="panel-body">
+                    <div class="choice" v-for="(choice,optionIndex) in ques.option.split('%%%')" v-show="ques.type == '0' || ques.type == '1'">
+                        <label>{{String.fromCharCode(65+optionIndex)}}.</label>
+                        <label>
+                            <input type="checkbox" value="">{{choice.substr(+choice.indexOf('.')+1)}}
+                        </label>
+                    </div>
+                    <div class="shortAnswerQuestion" v-show="ques.type == '4'">
+                        <textarea class="form-control" rows="3" style="resize: none" readonly>{{ques.studentAnswer}}</textarea>
+                    </div>
+                </div>
+                <div class="panel-footer">分值:{{ques.score}}<br>正确答案:{{ques.standardAnswer | numToChar(ques.type)}}<br>答案解析:{{ques.parsing}}</div>
+            </div>
+            <div class="panel panel-default" v-show="ques.type == '4'">
+                <div class="panel-heading">{{quesIndex+1}}. {{ques.stem}}</div>
+                <div class="panel-body">
+                    <div class="shortAnswerQuestion" >
+                        <textarea class="form-control" rows="3" style="resize: none" readonly>{{ques.studentAnswer}}</textarea>
+                    </div>
+                </div>
+                <div class="panel-footer">分值:{{ques.score}}<br>正确答案:{{ques.standardAnswer | numToChar(ques.type)}}<br>答案解析:{{ques.parsing}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="/Exam/js/teacher/apps/studentPaper/studentPaper.js"></script>
+</html>

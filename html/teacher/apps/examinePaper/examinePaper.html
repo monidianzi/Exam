@@ -1,0 +1,167 @@
+<div class="examinePaper">
+    <div class="examinePaperSearch">
+        <div class="row">
+            <form class="form-inline">
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control group">
+                            <option value="" selected>所属组</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control paperName" v-model="search.examName" placeholder="试卷名称">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary" @click="goSearch">搜索</button>
+                        <button type="button" class="btn btn-default" @click="empty">清空</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="examinePaperList">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>考试科目</th>
+                <th>考试时间</th>
+                <th>评阅时间</th>
+                <th>所属组</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody v-for="(exam,index) in examList">
+            <tr>
+                <td>{{exam.examID}}</td>
+                <td><a href="javascript:;">{{exam.examName}}</a></td>
+                <td>{{exam.startTime | unixToTime}}</td>
+                <td>{{exam.correctBegin | unixToTime}} ~ {{exam.correctEnd | unixToTime}}</td>
+                <td>{{exam.groupName}}</td>
+                <td><a href="javascript:;"  @click="examineModal(index)">人工评阅</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary" @click="examineModal(index)">搜索</button>
+    <div class="modal fade" id="examineModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document" style="width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" @click="examineModalclose"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="studentList" v-for="(student,index) in studentGroup">
+                        <div class="student" @click="getQues(index)">
+                            {{index+1}}
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="questionList">
+                        <div class="row">
+                            <!--<div class="col-md-6">-->
+                                <!--<div class="paperLeft">-->
+                                    <!--<h4>标准答案</h4>-->
+                                    <!--<div class="ques" v-for="(ques,quesIndex) in questionInfo">-->
+                                        <!--<div class="panel panel-default quesLeft">-->
+                                            <!--<div class="panel-heading">-->
+                                                <!--<h3 class="panel-title">{{quesIndex+1}}. {{ques.stem}}</h3>-->
+                                            <!--</div>-->
+                                            <!--<div class="panel-body">-->
+                                                <!--<div class="choice" v-for="(choice,index) in ques.option.split('%%%')" v-show="ques.type == '0' || ques.type == '1'">-->
+                                                    <!--<label>{{String.fromCharCode(65+index)}}.</label>-->
+                                                    <!--<label>-->
+                                                        <!--<input type="checkbox" value="">{{choice.substr(+choice.indexOf('.')+1)}}-->
+                                                    <!--</label>-->
+                                                <!--</div>-->
+                                                <!--<div class="shortAnswerQuestion" v-show="ques.type == '4'">-->
+                                                    <!--<textarea class="form-control" rows="3" style="resize: none"></textarea>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="panel-footer">分值:{{ques.score}}<br>正确答案:{{ques.standardAnswer | numToChar(ques.type)}}<br>答案解析:{{ques.parsing}}</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div class="col-md-12">
+                                <div class="paperRight">
+                                    <h4>考生答案</h4>
+                                    <div class="ques" v-for="(ques,quesIndex) in questionInfo">
+                                        <div class="panel panel-default quesRight" v-show="ques.type !== 0 && ques.type !== 1">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">{{ques.stem}}</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <!--<div class="choice" v-for="(choice,index) in ques.option.split('%%%')" v-show="ques.type == '0' || ques.type == '1'">-->
+                                                    <!--<label>{{String.fromCharCode(65+index)}}.</label>-->
+                                                    <!--<label>-->
+                                                        <!--<input type="checkbox" value="">{{choice.substr(+choice.indexOf('.')+1)}}-->
+                                                    <!--</label>-->
+                                                <!--</div>-->
+                                                <div class="shortAnswerQuestion" v-show="ques.type == '4'">
+                                                    <textarea class="form-control" rows="3" style="resize: none"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="panel-footer">分值:{{ques.score}}
+                                                <br>正确答案:{{ques.standardAnswer | numToChar(ques.type)}}
+                                                <br>考生答案:{{ques.studentAnswer | numToChar(ques.type)}}<br><span>考生得分</span><input class="form-control" type="number" v-model="ques.studentScore"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-right"><button type="button" class="btn btn-primary btn-lg save" @click="saveExamine">保存并下一位</button></div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+$.ajax({
+type:"post",
+url: '/login/getRealName',
+dataType: 'json',
+contentType: 'application/json;charset=utf-8',
+success:function (backData) {
+if (backData.code > 0) {
+alert(backData.message);
+}
+else {
+//加载主页面的数据
+var realName = backData.result.realName;
+var notice = backData.result.notice;
+var str='';
+$('.navbar p').append('<span>' + realName + '</span>');
+for (var i=0;i<notice.length;i++){
+str += '<dd>'
+    + '<a href="javascript:;">'
+        + (i + 1) + '. ' + notice[i]
+        + '</a>'
+    + '</dd>'
+}
+$(".notice dl").append(str);
+
+$('.main .row .left .notice').on('click','dd a',function () {
+alert($(this).text().split('.')[1]);
+});
+}
+}
+})

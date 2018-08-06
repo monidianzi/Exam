@@ -15,7 +15,13 @@ define([
     'addQuestion',
     'questionManage',
     'addPaper',
-    'paperManage'
+    'paperManage',
+    'groupManage',
+    'addExam',
+    'examManage',
+    'examinePaper',
+    'examScore',
+    'homePage'
 ], function(
     _view,
     treeview,
@@ -23,9 +29,15 @@ define([
     addQuestion,
     questionManage,
     addPaper,
-    paperManage
+    paperManage,
+    groupManage,
+    addExam,
+    examManage,
+    examinePaper,
+    examScore,
+    homePage
 ) {
-    var self;
+    var self =this;
     var app = new vue({
         el: '#component',
         template:_view,
@@ -35,11 +47,13 @@ define([
          * {String} activeApp 当前激活组件
          * {Object} questionInfo 试题信息
          * {Object} paperInfo 试卷信息
+         * {Object} examInfo 考试信息
          */
         data:{
-            activeApp:'main',
+            activeApp:'homePage',
             questionInfo: {},
-            paperInfo: {}
+            paperInfo: {},
+            examInfo: {}
         },
         methods:{
             /**
@@ -50,8 +64,10 @@ define([
              */
             changeComponent: function (component) {
                 this.activeApp = component;
-                //侧边导航激活添加试题组件、父组件传递属性试题ID清空
+                //侧边导航激活添加试题组件、父组件传递属性清空
                 this.questionInfo = {};
+                this.paperInfo = {};
+                this.examInfo = {};
             },
             /**
              * 加载左侧导航栏--treeview
@@ -69,7 +85,7 @@ define([
                     {
                         text:'首页',
                         icon: "glyphicon glyphicon-home",
-                        component:'main',
+                        component:'homePage',
                         deep:1,
                         href: ''
                     },
@@ -126,19 +142,71 @@ define([
                             {
                                 text:'添加考试',
                                 icon: "glyphicon glyphicon-open",
-                                component:'main',
+                                component:'addExam',
                                 deep:2,
                                 href:''
                             },
                             {
                                 text:'考试管理',
                                 icon: "glyphicon glyphicon-th-list",
-                                component:'main',
+                                component:'examManage',
+                                deep:2,
+                                href:''
+                            },
+                            {
+                                text:'考试成绩',
+                                icon: "glyphicon glyphicon-th-list",
+                                component:'examScore',
                                 deep:2,
                                 href:''
                             }
                         ]
                     },
+                    {
+                        text: '评卷',
+                        icon: "glyphicon glyphicon-user",
+                        href: '',
+                        deep:1,
+                        nodes:[
+                            {
+                                text:'人工评阅',
+                                icon: "glyphicon glyphicon-th-list",
+                                component:'examinePaper',
+                                deep:2,
+                                href:''
+                            }
+                        ]
+                    },
+                    {
+                        text: '用户/组',
+                        icon: "glyphicon glyphicon-user",
+                        href: '',
+                        deep:1,
+                        nodes:[
+                            {
+                                text:'组管理',
+                                icon: "glyphicon glyphicon-th-list",
+                                component:'groupManage',
+                                deep:2,
+                                href:''
+                            }
+                        ]
+                    },
+                    {
+                        text: '管理',
+                        icon: "glyphicon glyphicon-user",
+                        href: '',
+                        deep:1,
+                        nodes:[
+                            {
+                                text:'平台管理',
+                                icon: "glyphicon glyphicon-th-list",
+                                component:'manage',
+                                deep:2,
+                                href:''
+                            }
+                        ]
+                    }
                 ];
                 //样式设置
                 $('#treeview').treeview({
@@ -156,12 +224,15 @@ define([
                     selectedBackColor: "#20A8D8",
                     enableLinks:false,
                     data: tree,
-                    levels: 2
+                    levels: 1
                 });
                 //左侧导航点击事件响应
                 $('#treeview').on('nodeSelected', function(event,node) {
                     var nodeid = $(node)[0].nodeId;
                     var tree = $('#treeview');
+                    if($(node)[0].component === 'homePage'){
+                        self.changeComponent('homePage');
+                    }
                     //点击第一层节点，展开或折叠子树
                     if($(node)[0].deep === 1){
                         if(node.state.expanded){
@@ -175,6 +246,10 @@ define([
                     }
                     //点击第二层节点，切换组件
                     else if($(node)[0].deep === 2){
+                        //管理端跳转
+                        if($(node)[0].component === 'manage'){
+                            window.location.href= '/auditor/toAuditMainPage';
+                        }
                         self.changeComponent($(node)[0].component);
                     }
                 });
@@ -198,19 +273,98 @@ define([
             papermodify: function (paper) {
                 this.paperInfo = paper;
                 this.activeApp = addPaper;
+            },
+            /**
+             * 监听子组件中激活主页组件事件
+             * @method
+             * @param
+             * @return
+             */
+            showHomePage: function () {
+                self.changeComponent('homePage');
+                var nodeId = $('#treeview').treeview('getSelected')[0];
+                $('#treeview').treeview('toggleNodeSelected', [ nodeId, { silent: true } ]);
+            },
+            /**
+             * 监听考试管理组件考试编辑事件、获取需编辑的考试信息、切换添加考试组件
+             * @method
+             * @param {Number} index 试卷ID
+             * @return
+             */
+            examModify: function (exam) {
+                //获取考试信息
+                $.ajax({
+                    type: 'post',
+                    url: '/exam/loadModifyExam',
+                    contentType:"application/json;charset=utf-8",
+                    dataType:'json',
+                    data: JSON.stringify({examID:exam.examID }),
+                    success: function(msg) {
+                        if (msg.code === 0) {
+                            self.examInfo = msg.result;
+                            self.activeApp = addExam;
+                        } else {
+                            alert('加载失败');
+                        }
+                    }
+                });
+            },
+            /**
+             * 退出
+             * @method
+             * @param {Number} index 试卷ID
+             * @return
+             */
+            back: function () {
+                $.ajax({
+                    type: "post",
+                    url: "/login/exitLogin",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: 'json',
+                    success: function (backData) {
+                        if(backData.code > 0) {
+                            alert(backData.message)
+                        } else {
+                            window.location.href = "/login/enterLoginPage";
+                        }
+                    }
+                });
+            },
+            load: function () {
+                $.ajax({
+                    type:"post",
+                    url: '/login/getRealName',
+                    dataType: 'json',
+                    contentType: 'application/json;charset=utf-8',
+                    success:function (backData) {
+                        if (backData.code > 0) {
+                            alert(backData.message);
+                        }
+                        else {
+                            $('.navbar p').append('<span class="userName">' + backData.result.realName + '</span>');
+                        }
+                    }
+                })
             }
-
         },
         components:{
+            homePage:homePage,
             addQuestion: addQuestion,
             questionManage: questionManage,
             addPaper: addPaper,
-            paperManage: paperManage
+            paperManage: paperManage,
+            groupManage: groupManage,
+            addExam: addExam,
+            examManage: examManage,
+            examinePaper: examinePaper,
+            examScore: examScore
         },
         mounted:function () {
             //self指向当前vue对象
             self = this;
             self.loadTree();
+            //self.changeComponent('homePage');
+            self.load();
         }
     });
 });

@@ -39,7 +39,7 @@ define([
                 question: {
                     knowledge: '',
                     difficulty: '',
-                    type: 0,
+                    type: '',
                     share: 0,
                     stem: '',
                     option: ['','','',''],
@@ -56,7 +56,9 @@ define([
         props: {
             questionInfo: {
                 type: Object,
-                default: {}
+                default: {
+                    pic: '111'
+                }
             }
         },
         methods: {
@@ -67,7 +69,7 @@ define([
              * @return
              */
             changeType: function (event) {
-                if($(event.target).val() === '2') {
+                if($(event.target).val() === '4' || $(event.target).val() === '5' || $(event.target).val() === '6' || $(event.target).val() === '7' || $(event.target).val() === '8') {
                     this.isQuestionsActive = true;
                     this.isChoiceActive = false;
                 } else {
@@ -135,8 +137,11 @@ define([
                 //必须填写校验
                 if(this.neceCheck(this.isChoiceActive)) {
                     //将VUE对象转化为普通对象、后期拼接字符串不影响页面显示
+                    var  file = $('input[type="file"]');
+                    var formData = new FormData();
+                    formData.append(file[0].name, file[0].files[0]);
                     var datapara = JSON.parse(JSON.stringify(this.question));
-                    datapara.share = datapara === true ? 1:0;
+                    datapara.share = datapara.share === true ? 1:0;
                     //选择题拼凑选项字符串{1.选项一%%%2.选项二%%%3.选项三}、正确答案字符串{1%2%3}
                     if(this.isChoiceActive) {
                         var optionString = '';
@@ -150,11 +155,13 @@ define([
                         //简答题删除选项属性
                         delete datapara.option;
                     }
-                    var toJSON = JSON.stringify(datapara);
+                    for(var key in datapara) {
+                        formData.append(key, datapara[key]);
+                    }
                     $.ajax({
                         type: 'post',
                         url: '/question/addQuestion',
-                        data: toJSON,
+                        data: formData,
                         contentType:"application/json;charset=utf-8",
                         dataType:'json',
                         success: function(msg) {
@@ -194,7 +201,7 @@ define([
                 self.question.share = question.share  == 1 ? true:false;
                 self.question.stem = question.stem;
                 self.question.parsing = question.parsing;
-                if(question.type == 2 ){
+                if(question.type == 4 || question.type == 5 || question.type == 6 || question.type == 7 || question.type == 8 ){
                     self.isQuestionsActive = true;
                     self.isChoiceActive = false;
                     self.question.standardAnswer = question.standardAnswer;
@@ -207,7 +214,37 @@ define([
                         self.question.option.push(element.substr(+element.indexOf('.')+1));
                     });
                 }
+            },
+            /**
+             * 取消操作，跳转至首页
+             * @method
+             * @param
+             * @return
+             */
+            cancle: function () {
+                this.$emit('showHomePage');
             }
+        },
+        filters: {
+            /**
+             * 将获取的文件路径中文件名提取出来
+             * @method
+             * @param
+             * @return
+             */
+            getFileName: function (value) {
+                if( JSON.stringify(this.questionInfo) != '{}') {
+                    var fileName = ''
+                    value.split('_').forEach(function (t, index) {
+                        if (index > 1) {
+                            fileName += t;
+                        }
+                    });
+                    return fileName.substring(0, fileName.length - 2);
+                } else {
+                    return;
+                }
+            },
         },
         mounted: function () {
             //试题编辑激活本组件
@@ -219,3 +256,4 @@ define([
     }
 
 });
+

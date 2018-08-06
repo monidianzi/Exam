@@ -1,0 +1,113 @@
+<div class="examManage">
+    <div class="examsearch">
+        <div class="row">
+            <form class="form-inline">
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control examClassify" v-model="search.examClassify" id="examClassify">
+                            <option value="" selected>考试分类</option>
+                            <option value="0">个人</option>
+                            <option value="1">学校</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control auditStatus" v-model="search.auditStatus" id="auditStatus">
+                            <option value="" selected>考试状态</option>
+                            <option value="0">已通过</option>
+                            <option value="1">正在审核</option>
+                            <option value="2">未通过</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control examName" v-model="search.examName" id="examName" placeholder="考试名称">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control startTime" v-model="search.startTime" id="startTime" placeholder="考试日期">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control founder" v-model="search.founder" id="founder" placeholder="创建人">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control lastUpdate" v-model="search.lastUpdate" id="lastUpdate" placeholder="最后更新时间">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary" @click="goSearch">搜索</button>
+                        <button type="button" class="btn btn-default" @click="empty">清空</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="examList">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>考试名称</th>
+                <th>状态</th>
+                <th>考试分类</th>
+                <th>考试日期</th>
+                <th>未通过理由</th>
+                <th>创建人</th>
+                <th>最后更新时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody v-for="(exam,index) in examList">
+            <tr>
+                <td>{{exam.examID}}</td>
+                <td>{{exam.examName}}</td>
+                <td>{{exam.auditStatus | statusToString}}</td>
+                <td>{{exam.examClassify | classifyToString}}</td>
+                <td>{{exam.startTime | unixToTime |unixToTimeSlot(exam.startTime,exam.duration)}}</td>
+                <td>{{exam.judge}}</td>
+                <td>{{exam.founder}}</td>
+                <td>{{exam.lastUpdate | unixToTime}}</td>
+                <td v-if="exam.auditStatus == '2'"><a href="javascript:;" @click="examModify(index)">编辑</a><a href="javascript:;" @click="examDel(index)">删除</a></td>
+                <td v-else-if="exam.auditStatus == '1'"></td>
+                <td v-else-if="exam.auditStatus == '0'"><a href="javascript:;" @click="examChange(index)">变更申请</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="bottom">
+        <div class="delete pull-left">
+            <button type="button" class="btn btn-default">删除</button>
+        </div>
+        <div class="paging pull-right">
+            <ul id="questionPage"></ul>
+        </div>
+    </div>
+    <div class="modal fade" id="change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">变更申请</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control reason" id="reason" rows="4" style="resize: none"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" @click="changeSubmit">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

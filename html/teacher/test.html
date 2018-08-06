@@ -8,12 +8,191 @@
     <link rel="stylesheet" type="text/css" href="../../public/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <script type="text/javascript" src="../../public/jquery/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="../../public/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <style>
+        .test {
+            width: 200px;
+            height: 100px;
+            margin-bottom: 20px;
+            background-color: #000;
+        }
+    </style>
     <script type="text/javascript">
         $(function () {
-            var arr=[{name:'张三'},{sex:'male'},{age:18}];
-            console.log(arr.indexOf({name: '张三'}));
+//            console.log(Object.constructor);
+//
+            //alert(window.location.search.substring(1));
+//            function Person() {
+//                this.name ='zhangsan1111';
+//            }
+//            function pppp() {
+//                this.name ='zhangsan2222';
+//            }
+////
 
-            console.log({name:'张三'} === {name:'张三'});
+//////            console.log(Person.prototype);
+//////            console.log(Person.__proto__);
+////            console.log(pppp.prototype);
+////
+
+//            var a = new pppp();
+//            console.log(a);
+//            var b = new Person();
+//            console.log(b);
+//            var a ='aaaaaa';
+//            console.log(typeof a == 'string');
+
+//
+//            function pp() {
+//
+//            }
+//            var a= new Date();
+////
+//            console.log(Array.prototype);
+//            //console.log([].__proto__);
+//            console.log(String.prototype);
+//            console.log(new String('1111').__proto__);
+//            console.log(RegExp.prototype);
+//
+////            console.log(pp.prototype);
+//            var p= new Person();
+//            var a = new Object();
+//            var f= new Function();
+            //console.log(p.__proto__);
+//            console.log(Person.__proto__);
+//
+//
+//            console.log(Object.prototype);
+//            console.log(Object.__proto__);
+//            console.log(Object.constructor);
+//            console.log(Function.prototype);
+//            console.log(Function.__proto__);
+//            console.log(Function.constructor);
+//
+//            console.log(Function.prototype.constructor);
+
+//            console.log(p.__proto__);
+//            console.log(f);
+//            console.log(f.prototype);
+//            console.log(pppp.__proto__.__proto__);
+//            console.log(pppp.__proto__.constructor);
+//            function timestampToTime(timestamp) {
+//                console.log(timestamp+7200000);
+//                var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+//                var Y = date.getFullYear() + '-';
+//                var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+//                var D = date.getDate() + ' ';
+//                var h = date.getHours() + ':';
+//                var m = date.getMinutes();
+//                var s = date.getSeconds();
+//                return Y+M+D+h+m;
+//            }
+//            timestampToTime(1526999700000);
+//            console.log(timestampToTime(1526999700000));//2014-06-18 10:33:24
+//
+//            $('#change').on('click',function () {
+//                $('.test').css('marginBottom',Math.random()*100+20);
+//            })
+
+
+//            function ajax(object) {
+//                var ajax = new XMLHttpRequest();
+//                if(object.type == 'get'){
+//                    if(object.data){
+//                        object.url += '?'+object.data;
+//                    }
+//                    ajax.open(object.type,object.url);
+//                    ajax.send();
+//                } else {
+//                    ajax.setRequestHeader('content-type','application/x-www-form-urlencoded');
+//                    ajax.open(object.type,object.url);
+//                    ajax.send(object.data||'');
+//                }
+//
+//                ajax.onreadystatechange(function () {
+//                    if(ajax.readyState == 4 && ajax.status == 200){
+//                        //回调函数
+//                        object.success();
+//                    }
+//                })
+//            }
+//            function ajax_tool_pro(option) {
+//                // 异步对象
+//                var ajax = new XMLHttpRequest();
+//
+//                // get 跟post  需要分别写不同的代码
+//                if (option.method=='get') {
+//                    // get请求
+//                    if (option.data) {
+//                        // 如果有值
+//                        option.url+='?';
+//                        option.url+=option.data;
+//                    }else{
+//
+//                    }
+//                    // 设置 方法 以及 option.url
+//                    ajax.open(option.method,option.url);
+//
+//                    // send即可
+//                    ajax.send();
+//                }else{
+//                    // post请求
+//                    // post请求 option.url 是不需要改变
+//                    ajax.open(option.method,option.url);
+//
+//                    // 需要设置请求报文
+//                    ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+//
+//                    // 判断option.data send发送数据
+//                    if (option.data) {
+//                        // 如果有值 从send发送
+//                        ajax.send(option.data);
+//                    }else{
+//                        // 木有值 直接发送即可
+//                        ajax.send();
+//                    }
+//                }
+//
+//                // 注册事件
+//                ajax.onreadystatechange = function () {
+//                    // 在事件中 获取数据 并修改界面显示
+//                    if (ajax.readyState==4&&ajax.status==200) {
+//                        // console.log(ajax.responseText);
+//
+//                        // 将 数据 让 外面可以使用
+//                        // return ajax.responseText;
+//
+//                        // 当 onreadystatechange 调用时 说明 数据回来了
+//                        // ajax.responseText;
+//
+//                        // 如果说 外面可以传入一个 function 作为参数 success
+//                        option.success(ajax.responseText);
+//                    }
+//                }
+//
+//            }
+//            for (var i = 0; i< 10; i++) {
+//                setTimeout((function (i) {
+//
+//                        console.log(i)
+//
+//                })(i), 0)
+//            }
+//            function fun (n, o){
+//                console.log(o);
+//                return {
+//                    fun: function (m) {
+//                        return fun(m,n);
+//                    }
+//                };
+//            };
+//            var a = fun(0); a.fun(1); a.fun(2); a.fun(3);
+//            //undefined
+//            var b = fun(0).fun(1).fun(2).fun(3);
+//            $.each([{a:'aaaaa',b:'bbbbbb'},{c:'aaaaa',d:'bbbbbb'}],function () {
+//                console.log(this);
+//            });
+            console.log($({a: 'aaaaa', b: 'bbbbb'}));
+
         });
     </script>
     <style>
@@ -21,6 +200,25 @@
     </style>
 </head>
 <body>
+
+<div class="test" a="aaaaa" value="111" id="fuck" align="center" tabindex="1">
+    <span>11111</span>
+    <span>22222</span>
+    <span>33333</span>
+    <span>44444</span>
+</div>
+<div class="add"></div>
+<div class="add"></div>
+<div class="add"></div>
+
+<button id="change">点我</button>
+
+<!--<p>-->
+    <!--<a>-->
+        <!--<img src="" style="width: 100px;height: 100px;"/>-->
+    <!--</a>-->
+<!--</p>-->
+
 
 </body>
 </html>

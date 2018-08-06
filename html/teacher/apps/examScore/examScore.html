@@ -1,0 +1,115 @@
+<div class="examScore">
+    <div class="examScoreSearch">
+        <div class="row">
+            <form class="form-inline">
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <select class="form-control examClassify" id="examClassify" v-model="search.examClassify">
+                            <option value="" selected>考试分类</option>
+                            <option value="0">个人</option>
+                            <option value="1">学校</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control group" placeholder="所属组" id="group" v-model="search.group">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control form_datetime begin" placeholder="考试时间" id="begin" readonly v-model="search.begin">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control form_datetime end" placeholder="考试时间" id="end" readonly v-model="search.end">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+                    <div class="form-group">
+                        <input class="form-control examName" placeholder="考试名称" id="examName" v-model="search.examName">
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3">
+
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary" @click="goSearch">搜索</button>
+                        <button type="button" class="btn btn-default" @click="empty">清空</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="examScoreList">
+        <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>考试名称</th>
+            <th>所属组</th>
+            <th>考试分类</th>
+            <th>考试时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody v-for="(exam,index) in examList">
+        <tr>
+            <td>{{exam.examID}}</td>
+            <td>{{exam.examName}}</td>
+            <td>{{exam.group}}</td>
+            <td>{{exam.examClassify | typeToString}}</td>
+            <td>{{exam.startTime | unixToTime(exam.duration)}}</td>
+            <td><a href="javascript:;" @click="modalShow(index)">查看考生成绩</a></td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <div class="bottom">
+        <div class="paging pull-right">
+            <ul id="questionPage"></ul>
+        </div>
+    </div>
+    <div class="modal fade" id="stuScore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document" style="width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" @click="modalClose"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">考试成绩</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>考生姓名</th>
+                            <th>学号</th>
+                            <th>班级</th>
+                            <th>成绩</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody v-for="(student,index) in studentList">
+                        <tr>
+                            <td>{{student.studentID}}</td>
+                            <td>{{student.realName}}</td>
+                            <td>{{student.number}}</td>
+                            <td>{{student.className}}</td>
+                            <td>{{student.score}}</td>
+                            <td><a href="javascript:;" @click="seeStuPaper(index)">查看试卷</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="stuPaging">
+                        <ul id="studentPage"></ul>
+                    </div>
+                    <div class="clearfix">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
